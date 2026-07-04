@@ -8,8 +8,8 @@ function DashboardMedico() {
   const { usuarioActual } = useAuth();
   const { turnos, marcarAtendido } = useTurnos();
 
-  const [filtroFecha, setFiltroFecha] = useState('todos'); // 'todos' | 'hoy' | 'proximos'
-  const [filtroEstado, setFiltroEstado] = useState('todos'); // 'todos' | 'pendiente' | 'atendido' | 'cancelado'
+  const [filtroFecha, setFiltroFecha] = useState('todos');
+  const [filtroEstado, setFiltroEstado] = useState('todos');
 
   const hoy = new Date().toISOString().split('T')[0];
 
@@ -45,19 +45,25 @@ function DashboardMedico() {
   return (
     <div className='min-h-screen bg-gray-100'>
       <Navbar />
+      <div className='relative overflow-hidden w-full bg-gradient-to-br from-brand-500 via-brand-600 to-brand-700 px-6 py-10 sm:py-14'>
+        <div className='absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/10' />
+        <div className='absolute -bottom-16 -left-8 w-56 h-56 rounded-full bg-white/10' />
+        <div className='relative z-10 max-w-4xl mx-auto'>
+          <h2 className='text-2xl sm:text-3xl font-bold text-white mb-1'>
+            Hola, Dr/a. {usuarioActual?.nombre}
+          </h2>
+          <p className='text-brand-50 text-sm sm:text-base'>
+            {usuarioActual?.especialidad}
+          </p>
+        </div>
+      </div>
 
       <main className='max-w-4xl mx-auto p-6'>
-        <h2 className='text-xl font-semibold text-gray-800 mb-1'>
-          Hola, Dr/a. {usuarioActual?.nombre}
-        </h2>
-        <p className='text-teal-600 font-medium mb-6'>
-          {usuarioActual?.especialidad}
-        </p>
-
-        {/* Estadísticas */}
         <div className='grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8'>
           <div className='bg-white p-4 rounded-lg shadow text-center'>
-            <p className='text-2xl font-bold text-teal-600'>{stats.totalHoy}</p>
+            <p className='text-2xl font-bold text-brand-600'>
+              {stats.totalHoy}
+            </p>
             <p className='text-xs text-gray-500 mt-1'>Turnos hoy</p>
           </div>
           <div className='bg-white p-4 rounded-lg shadow text-center'>
@@ -80,7 +86,6 @@ function DashboardMedico() {
           </div>
         </div>
 
-        {/* Filtros */}
         <div className='bg-white p-4 rounded-lg shadow mb-6 flex flex-col sm:flex-row gap-4'>
           <div className='flex-1'>
             <label className='block text-xs font-medium text-gray-500 mb-1'>
@@ -114,7 +119,6 @@ function DashboardMedico() {
           </div>
         </div>
 
-        {/* Agenda */}
         <h3 className='text-lg font-bold text-gray-800 mb-3'>Mi agenda</h3>
 
         {turnosFiltrados.length === 0 ? (
