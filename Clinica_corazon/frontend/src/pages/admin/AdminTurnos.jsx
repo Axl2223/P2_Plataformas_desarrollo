@@ -1,14 +1,18 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTurnos } from '../../context/TurnosContext';
 import TurnoCard from '../../component/TurnoCard';
 
 function AdminTurnos() {
   const { medicos } = useAuth();
-  const { turnos, cancelarTurno } = useTurnos();
+  const { turnos, cargarTurnos, cancelarTurno } = useTurnos();
 
   const [filtroEstado, setFiltroEstado] = useState('todos');
   const [filtroMedico, setFiltroMedico] = useState('todos');
+
+  useEffect(() => {
+    cargarTurnos();
+  }, [cargarTurnos]);
 
   const turnosFiltrados = useMemo(() => {
     return turnos
@@ -16,7 +20,7 @@ function AdminTurnos() {
         filtroEstado === 'todos' ? true : t.estado === filtroEstado,
       )
       .filter((t) =>
-        filtroMedico === 'todos' ? true : t.medicoId === Number(filtroMedico),
+        filtroMedico === 'todos' ? true : t.medicoId === filtroMedico,
       )
       .sort((a, b) => (b.fecha + b.hora).localeCompare(a.fecha + a.hora));
   }, [turnos, filtroEstado, filtroMedico]);

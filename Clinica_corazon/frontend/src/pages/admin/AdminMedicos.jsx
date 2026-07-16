@@ -6,18 +6,18 @@ function AdminMedicos() {
   const { medicos, agregarMedico, editarMedico, eliminarMedico } = useAuth();
   const [medicoEditando, setMedicoEditando] = useState(null);
 
-  function handleGuardarMedico(datos) {
+  async function handleGuardarMedico(datos) {
     const resultado = medicoEditando?.id
-      ? editarMedico(medicoEditando.id, datos)
-      : agregarMedico(datos);
+      ? await editarMedico(medicoEditando.id, datos)
+      : await agregarMedico(datos);
 
     if (resultado.exito) setMedicoEditando(null);
     return resultado;
   }
 
-  function handleEliminarMedico(id) {
+  async function handleEliminarMedico(id) {
     if (confirm('¿Seguro que querés eliminar este médico?')) {
-      eliminarMedico(id);
+      await eliminarMedico(id);
     }
   }
   return (

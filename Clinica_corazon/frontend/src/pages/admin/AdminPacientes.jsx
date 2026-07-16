@@ -7,18 +7,18 @@ function AdminPacientes() {
     useAuth();
   const [pacienteEditando, setPacienteEditando] = useState(null);
 
-  function handleGuardarPaciente(datos) {
+  async function handleGuardarPaciente(datos) {
     const resultado = pacienteEditando?.id
-      ? editarPaciente(pacienteEditando.id, datos)
-      : agregarPaciente(datos);
+      ? await editarPaciente(pacienteEditando.id, datos)
+      : await agregarPaciente(datos);
 
     if (resultado.exito) setPacienteEditando(null);
     return resultado;
   }
 
-  function handleEliminarPaciente(id) {
+  async function handleEliminarPaciente(id) {
     if (confirm('¿Seguro que querés eliminar este paciente?')) {
-      eliminarPaciente(id);
+      await eliminarPaciente(id);
     }
   }
   return (

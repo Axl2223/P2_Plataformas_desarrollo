@@ -4,17 +4,18 @@ import { useTurnos } from '../context/TurnosContext';
 
 function TurnoForm({ onTurnoCreado }) {
   const { usuarioActual, medicos } = useAuth();
-  const { agregarTurno, existeTurnoDuplicado } = useTurnos();
+  const { agregarTurno } = useTurnos();
 
   const [medicoId, setMedicoId] = useState('');
   const [fecha, setFecha] = useState('');
   const [hora, setHora] = useState('');
   const [error, setError] = useState('');
   const [exito, setExito] = useState('');
+  const [enviando, setEnviando] = useState(false);
 
   const hoy = new Date().toISOString().split('T')[0];
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     setExito('');
@@ -29,29 +30,33 @@ function TurnoForm({ onTurnoCreado }) {
       return;
     }
 
-    const medico = medicos.find((m) => m.id === Number(medicoId));
-
-    if (existeTurnoDuplicado(medico.id, fecha, hora)) {
-      setError('Ese médico ya tiene un turno ocupado en ese horario');
+    const medico = medicos.find((m) => m.id === medicoId);
+    if (!medico) {
+      setError('Seleccioná un médico válido');
       return;
     }
 
-    const turno = agregarTurno({
+    setEnviando(true);
+    const resultado = await agregarTurno({
       pacienteId: usuarioActual.id,
-      pacienteNombre: usuarioActual.nombre,
       medicoId: medico.id,
-      medicoNombre: medico.nombre,
       especialidad: medico.especialidad,
       fecha,
       hora,
     });
+    setEnviando(false);
+
+    if (!resultado.exito) {
+      setError(resultado.mensaje);
+      return;
+    }
 
     setExito('¡Turno reservado con éxito!');
     setMedicoId('');
     setFecha('');
     setHora('');
 
-    if (onTurnoCreado) onTurnoCreado(turno);
+    if (onTurnoCreado) onTurnoCreado();
   }
 
   return (
@@ -118,9 +123,10 @@ function TurnoForm({ onTurnoCreado }) {
 
       <button
         type='submit'
-        className='w-full bg-brand-600 text-white py-2 rounded hover:bg-brand-700 transition'
+        disabled={enviando}
+        className='w-full bg-brand-600 text-white py-2 rounded hover:bg-brand-700 transition disabled:opacity-60'
       >
-        Confirmar turno
+        {enviando ? 'Reservando...' : 'Confirmar turno'}
       </button>
     </form>
   );

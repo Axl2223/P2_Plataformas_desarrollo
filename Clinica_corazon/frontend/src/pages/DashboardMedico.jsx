@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTurnos } from '../context/TurnosContext';
 import Navbar from '../component/Navbar';
@@ -6,10 +6,14 @@ import TurnoCard from '../component/TurnoCard';
 
 function DashboardMedico() {
   const { usuarioActual } = useAuth();
-  const { turnos, marcarAtendido } = useTurnos();
+  const { turnos, cargarTurnos, marcarAtendido } = useTurnos();
 
   const [filtroFecha, setFiltroFecha] = useState('todos');
   const [filtroEstado, setFiltroEstado] = useState('todos');
+
+  useEffect(() => {
+    cargarTurnos();
+  }, [cargarTurnos]);
 
   const hoy = new Date().toISOString().split('T')[0];
 

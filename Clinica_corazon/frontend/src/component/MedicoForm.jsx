@@ -1,38 +1,44 @@
 import { useState, useEffect } from 'react';
 
-function PacienteForm({ pacienteEditando, onGuardar, onCancelar }) {
-  const [form, setForm] = useState({ nombre: '', email: '', password: '' });
+function MedicoForm({ medicoEditando, onGuardar, onCancelar }) {
+  const [form, setForm] = useState({
+    nombre: '',
+    especialidad: '',
+    email: '',
+    password: '',
+  });
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (pacienteEditando) {
+    if (medicoEditando) {
       setForm({
-        nombre: pacienteEditando.nombre,
-        email: pacienteEditando.email,
+        nombre: medicoEditando.nombre,
+        especialidad: medicoEditando.especialidad,
+        email: medicoEditando.email,
         password: '',
       });
     } else {
-      setForm({ nombre: '', email: '', password: '' });
+      setForm({ nombre: '', especialidad: '', email: '', password: '' });
     }
     setError('');
-  }, [pacienteEditando]);
+  }, [medicoEditando]);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError('');
 
-    const { nombre, email, password } = form;
+    const { nombre, especialidad, email, password } = form;
 
-    if (!nombre || !email) {
+    if (!nombre || !especialidad || !email) {
       setError('Completá todos los campos');
       return;
     }
 
-    if (!pacienteEditando && !password) {
+    if (!medicoEditando && !password) {
       setError('La contraseña es obligatoria');
       return;
     }
@@ -42,10 +48,10 @@ function PacienteForm({ pacienteEditando, onGuardar, onCancelar }) {
       return;
     }
 
-    const datos = { nombre, email };
+    const datos = { nombre, especialidad, email };
     if (password) datos.password = password;
 
-    const resultado = onGuardar(datos);
+    const resultado = await onGuardar(datos);
 
     if (resultado && !resultado.exito) {
       setError(resultado.mensaje);
@@ -57,8 +63,8 @@ function PacienteForm({ pacienteEditando, onGuardar, onCancelar }) {
       onSubmit={handleSubmit}
       className='bg-white p-6 rounded-lg shadow space-y-4'
     >
-      <h3 className='text-lg font-bold text-brand-600'>
-        {pacienteEditando ? 'Editar paciente' : 'Nuevo paciente'}
+      <h3 className='text-lg font-bold text-teal-600'>
+        {medicoEditando ? 'Editar médico' : 'Nuevo médico'}
       </h3>
 
       {error && (
@@ -80,6 +86,19 @@ function PacienteForm({ pacienteEditando, onGuardar, onCancelar }) {
 
       <div>
         <label className='block text-sm font-medium text-gray-700 mb-1'>
+          Especialidad
+        </label>
+        <input
+          type='text'
+          name='especialidad'
+          value={form.especialidad}
+          onChange={handleChange}
+          className='w-full border border-gray-300 rounded px-3 py-2'
+        />
+      </div>
+
+      <div>
+        <label className='block text-sm font-medium text-gray-700 mb-1'>
           Email
         </label>
         <input
@@ -94,7 +113,7 @@ function PacienteForm({ pacienteEditando, onGuardar, onCancelar }) {
       <div>
         <label className='block text-sm font-medium text-gray-700 mb-1'>
           Contraseña{' '}
-          {pacienteEditando && (
+          {medicoEditando && (
             <span className='text-gray-400 text-xs'>
               (dejar en blanco para no cambiar)
             </span>
@@ -112,7 +131,7 @@ function PacienteForm({ pacienteEditando, onGuardar, onCancelar }) {
       <div className='flex gap-3'>
         <button
           type='submit'
-          className='flex-1 bg-brand-600 text-white py-2 rounded hover:bg-brand-700 transition'
+          className='flex-1 bg-teal-600 text-white py-2 rounded hover:bg-teal-700 transition'
         >
           Guardar
         </button>
@@ -128,4 +147,4 @@ function PacienteForm({ pacienteEditando, onGuardar, onCancelar }) {
   );
 }
 
-export default PacienteForm;
+export default MedicoForm;

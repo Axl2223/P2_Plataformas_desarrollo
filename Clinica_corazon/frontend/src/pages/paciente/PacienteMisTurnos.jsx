@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTurnos } from '../../context/TurnosContext';
@@ -5,7 +6,11 @@ import TurnoCard from '../../component/TurnoCard';
 
 function PacienteMisTurnos() {
   const { usuarioActual } = useAuth();
-  const { turnos, cancelarTurno } = useTurnos();
+  const { turnos, cargarTurnos, cancelarTurno } = useTurnos();
+
+  useEffect(() => {
+    cargarTurnos();
+  }, [cargarTurnos]);
 
   const misTurnos = turnos.filter((t) => t.pacienteId === usuarioActual.id);
 

@@ -12,6 +12,7 @@ import PacienteInicio from './pages/paciente/PacienteInicio';
 import PacienteNuevo from './pages/paciente/PacienteNuevo';
 import PacienteMisTurnos from './pages/paciente/PacienteMisTurnos';
 import ProtectedRoute from './component/ProtectedRoute';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -82,6 +83,10 @@ function App() {
             element={<PacienteMisTurnos />}
           />
         </Route>
+        <Route
+          path='*'
+          element={<NotFound />}
+        />
       </Routes>
     </BrowserRouter>
   );
