@@ -43,27 +43,7 @@ Clínica / gestión de turnos médicos. Entidades relacionadas: **Usuarios** (co
 
 # Estructura del proyecto
 
-Clinica_corazon/
-├── backend/ API REST (Node + Express + Mongoose)
-│ ├── src/
-│ │ ├── config/ conexión a MongoDB
-│ │ ├── controllers/ lógica de auth, usuarios y turnos
-│ │ ├── middleware/ verificación de JWT y roles
-│ │ ├── models/ schemas de Mongoose (Usuario, Turno)
-│ │ ├── routes/ endpoints REST
-│ │ ├── seed/ carga de usuarios de prueba
-│ │ └── server.js punto de entrada
-│ ├── .env.example
-│ └── package.json
-└── frontend/ Aplicación React (Vite)
-├── src/
-│ ├── component/ componentes reutilizables
-│ ├── context/ AuthContext y TurnosContext
-│ ├── pages/ pantallas (login, dashboards, 404, etc.)
-│ ├── services/ api.js (fetch + manejo del token)
-│ └── App.jsx rutas con React Router
-├── .env.example
-└── package.json
+![Estructura del proyecto](capturas/estructura_del_proyecto.png)
 
 # Instalación y ejecución local
 
